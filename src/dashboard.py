@@ -125,8 +125,10 @@ if st.sidebar.button("Generate Forecast"):
     if not filtered_df.empty:
         try:
             aggregated_hist = aggregate_data(filtered_df, freq=freq_option)
+            aggregated_hist.rename(columns={"Created UTC": "ds", "Score": "y"}, inplace=True)
+
             forecast_df = forecast_trend(aggregated_hist, periods=5, freq=freq_option)
-            
+
             combined = aggregated_hist.copy()
             combined["Type"] = "Historical"
             fc_plot = forecast_df[["ds", "yhat"]].rename(columns={"ds": "Created UTC", "yhat": "Score"})
